@@ -5,7 +5,9 @@
 #define ENCODER_OPTIMIZE_INTERRUPTS
 
 //HX711 constructor (dout pin, sck pin)
-HX711_ADC LoadCell(6, 5);
+const int HX_DOUT = 6;
+const int HX_SCK = 5;
+HX711_ADC LoadCell(HX_DOUT, HX_SCK);
 
 const byte PIN_CLK = 12;   // define CLK pin (any digital pin)
 const byte PIN_DIO = 11;   // define DIO pin (any digital pin)
