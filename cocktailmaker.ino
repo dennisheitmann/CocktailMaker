@@ -29,13 +29,16 @@ Encoder myEnc(ENC_DT, ENC_CLK);
 int oldPosition;
 
 // Dosiermengen
-int d_1_g = 16;
-int d_2_g = 32;
-int d_3_g = 140;
+int d_1_g = 24;
+int d_2_g = 144;
+int d_3_g = 12;
 int dosage;
 
 // Messdauer Waagenwert
 int timespan = 500;
+
+// minimales Bechergewicht
+int glasgewicht = 5;
 
 // menu
 String menustr = "COCKTAIL";
@@ -139,6 +142,7 @@ void loop() {
       buttonState = LOW;
       break;
     }
+    serial_purge();
   }
 
   menustr = "S--1";
@@ -213,7 +217,7 @@ void loop() {
     display.print(balancevalue);
     Serial.println(balancevalue);
     if (millis() > wait) {
-      if (balancevalue > (balancevalue_old + 20)) {
+      if (balancevalue > (balancevalue_old + glasgewicht)) {
         break;
       }
     }
@@ -324,4 +328,30 @@ void loop() {
   display.print(menustr);
   Serial.println(menustr);
   delay(10000);
+}
+
+void serial_purge() {
+  //receive from serial terminal
+  if (Serial.available() > 0) {
+    float i;
+    char inByte = Serial.read();
+    if (inByte == '1') {
+      MOT_1_state = !MOT_1_state;
+      Serial.print("MOT_1: ");
+      Serial.println(MOT_1_state);
+      digitalWrite(MOT_1, MOT_1_state);
+    }
+    if (inByte == '2') {
+      MOT_2_state = !MOT_2_state;
+      Serial.print("MOT_2: ");
+      Serial.println(MOT_2_state);
+      digitalWrite(MOT_2, MOT_2_state);
+    }
+    if (inByte == '3') {
+      MOT_3_state = !MOT_3_state;
+      Serial.print("MOT_3: ");
+      Serial.println(MOT_3_state);
+      digitalWrite(MOT_3, MOT_3_state);
+    }
+  }
 }
