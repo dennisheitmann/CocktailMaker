@@ -40,6 +40,10 @@ int timespan = 500;
 // minimales Bechergewicht
 int glasgewicht = 5;
 
+// Dosierungstimer
+long dosage_timer = 0;
+long max_dosage = 180;
+
 // menu
 String menustr = "COCKTAIL";
 String oldmenustr = "COCKTAIL";
@@ -233,6 +237,7 @@ void loop() {
   // der erste Aufruf von Balance nach Tarierung ist noch ungenau
   Serial.println(balance(2000));
   dosage = 0;
+  dosage_timer = millis() + (max_dosage * 1000);
   while (true) {
     if (errorvalue == 1) {
       break;
@@ -249,7 +254,16 @@ void loop() {
       digitalWrite(MOT_1, LOW);
       break;
     }
-    if (dosage < -19) {
+    if (dosage < -(glasgewicht)) {
+      digitalWrite(MOT_1, LOW);
+      errorvalue = 1;
+      display.clear();
+      menustr = "STOP";
+      display.print(menustr);
+      Serial.println(menustr);
+      break;
+    }
+    if (millis() > dosage_timer) {
       digitalWrite(MOT_1, LOW);
       errorvalue = 1;
       display.clear();
@@ -265,6 +279,7 @@ void loop() {
   // der erste Aufruf von Balance nach Tarierung ist noch ungenau
   Serial.println(balance(2000));
   dosage = 0;
+  dosage_timer = millis() + (max_dosage * 1000);
   while (true) {
     if (errorvalue == 1) {
       break;
@@ -281,7 +296,16 @@ void loop() {
       digitalWrite(MOT_2, LOW);
       break;
     }
-    if (dosage < -19) {
+    if (dosage < -(glasgewicht)) {
+      digitalWrite(MOT_2, LOW);
+      errorvalue = 1;
+      display.clear();
+      menustr = "STOP";
+      display.print(menustr);
+      Serial.println(menustr);
+      break;
+    }
+    if (millis() > dosage_timer) {
       digitalWrite(MOT_2, LOW);
       errorvalue = 1;
       display.clear();
@@ -297,6 +321,7 @@ void loop() {
   // der erste Aufruf von Balance nach Tarierung ist noch ungenau
   Serial.println(balance(2000));
   dosage = 0;
+  dosage_timer = millis() + (max_dosage * 1000);
   while (true) {
     if (errorvalue == 1) {
       break;
@@ -313,7 +338,16 @@ void loop() {
       digitalWrite(MOT_3, LOW);
       break;
     }
-    if (dosage < -19) {
+    if (dosage < -(glasgewicht)) {
+      digitalWrite(MOT_3, LOW);
+      errorvalue = 1;
+      display.clear();
+      menustr = "STOP";
+      display.print(menustr);
+      Serial.println(menustr);
+      break;
+    }
+    if (millis() > dosage_timer) {
       digitalWrite(MOT_3, LOW);
       errorvalue = 1;
       display.clear();
